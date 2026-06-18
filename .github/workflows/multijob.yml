@@ -1,6 +1,7 @@
 # issue 1 jobs are getting executed in parallel, we need to execute in sequence, one after another
 # issue 2 whatever files (e.g dragon.txt) are created in one job is cannot be accessible in another jobs
 # solution execute multiple jobs in sequence using needs 
+# files are created in build job still not accessible to others job, bcz three jobs are run in diff machines,& automatically the files are not shared between them
 
 name: Multi Job Workflow
 
@@ -17,23 +18,33 @@ jobs:
         - name: Execute Cowsay CMD
           run: cowsay -f dragon "Run for cover, I am a DRAGON....RAWR" >> dragon.txt
 
-        - name: Sleep for 30 seconds
-          run: sleep 30
+        - name: Upload Dragon text file
+          uses: actions/upload-artifact@v7
+          with:
+           name: dragon-text-file
+           path: dragon.txt
 
     test_job2:
         needs: build_job1
         runs-on: ubuntu-latest
         steps:
-        - name: Sleep for 10 seconds
-          run: sleep 10
+        - name: Download Dragon text file
+          uses: actions/download-artifact@v8
+          with:
+           name: dragon-text-file
 
         - name: Test file Exists
-          run: grep "dragon" dragon.txt
+          run: grep -i "dragon" dragon.txt
 
     deploy_job3:
         needs: [test_job2]
         runs-on: ubuntu-latest
         steps:
+        - name: Download Dragon text file
+          uses: actions/download-artifact@v8
+          with:
+           name: dragon-text-file
+        
         - name: Read file
           run: cat dragon.txt
 
