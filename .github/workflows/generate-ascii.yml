@@ -10,8 +10,13 @@ jobs:
         - name: Checkout Repo
           uses: actions/checkout@v6
 
+        - name: List Repo files
+          run: ls -ltra
+
         - name: Executing Shell Script
-          run: ./ascii_script.sh
+          run: |
+            chmod +x ascii_script.sh
+            ./ascii_script.sh
         
         # - name: Install Cowsay Program
         #   run: sudo apt-get install cowsay
@@ -24,6 +29,3 @@ jobs:
 
         # - name: Read File
         #   run: cat dragon.txt
-
-        - name: List Repo files
-          run: ls -ltra
