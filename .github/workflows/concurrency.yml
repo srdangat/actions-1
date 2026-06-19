@@ -24,7 +24,7 @@ jobs:
         needs: [docker]
         concurrency:
           group: prod-deployment
-          cancel-in-progress: true
+          cancel-in-progress: false
         runs-on: ubuntu-latest
         steps:
         - name: Docker run
