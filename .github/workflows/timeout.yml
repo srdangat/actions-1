@@ -11,7 +11,7 @@ jobs:
     docker:
         runs-on: ubuntu-latest
         steps:
-        - name: Docekr build
+        - name: Docker build
           run: echo docker build -t $CONTAINER_REGISTRY/${{ vars.DOCKER_USERNAME }}/$IMAGE_NAME:latest
 
         - name: Docker Login
@@ -22,13 +22,14 @@ jobs:
 
     deploy:
         needs: [docker]
+        timeout-minutes: 1
         concurrency:
           group: prod-deployment
           cancel-in-progress: false
         runs-on: ubuntu-latest
         steps:
-        - name: Docker Run with Timeout
-          timeout-minutes: 1
+        - name: Docker Run 
+        #   timeout-minutes: 1
           run: |
            echo docker run -d -p 8080:80 $CONTAINER_REGISTRY/${{ vars.DOCKER_USERNAME }}/$IMAGE_NAME:latest
            sleep 300s
