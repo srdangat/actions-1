@@ -1,3 +1,28 @@
+# concurrency demo:
+# deploy job takes 5–10 minutes
+# new push triggers another workflow
+
+# without concurrency → multiple deployments run together (bad)
+# with concurrency → only one runs at a time
+
+# 1. workflow A starts deploy
+# 2. workflow B triggered while A is running
+# 3. cancel-in-progress = true → A stops, B runs
+#    cancel-in-progress = false → B waits in queue
+
+# group = connects related workflows
+# result: safe deployments, no conflicts
+
+# concurrency = traffic police for workflows so they don’t crash into each other
+
+# Interview answer:
+# Concurrency in GitHub Actions prevents multiple workflow runs from executing at the same time for the same group.
+# In CI/CD pipelines, if a new commit is pushed during an active deployment, it can cause conflicts or inconsistent states.
+# Using concurrency, we either cancel the running job or queue the new one.
+# This ensures only one deployment happens at a time, making releases safe and predictable.
+
+
+
 name: Concurrency Demo
 
 on:
