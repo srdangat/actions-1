@@ -2,6 +2,7 @@
 # issue 2 whatever files (e.g dragon.txt) are created in one job is cannot be accessible in another jobs
 # solution execute multiple jobs in sequence using needs 
 # files are created in build job still not accessible to others job, bcz three jobs are run in diff machines,& automatically the files are not shared between them
+# By default, artifacts and logs are retained for 90 days, after which they are automatically deleted unless a different retention period is specified
 
 name: Multi Job Workflow
 
