@@ -2,8 +2,8 @@ name: Trigger Event
 
 on:
   workflow_dispatch: 
-  schedule:
-    - cron: "*/5 * * * *"   
+  # schedule:
+  #   - cron: "*/5 * * * *"   
 
 env:
    CONTAINER_REGISTRY: docker.io
