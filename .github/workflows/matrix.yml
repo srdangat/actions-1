@@ -1,3 +1,5 @@
+# Whenever a job fails in a matrix strategy, the default behavior is to stop the workflow and cancel any running jobs as well as jobs that are still queued.
+
 name: Matrix Demo
 
 on:
@@ -7,9 +9,17 @@ on:
 jobs:
     matrix-job:
         strategy:
+          fail-fast: false
+          max-parallel: 2
           matrix:
             os: [ubuntu-latest, ubuntu-22.04, windows-latest ]
             images: [hello-world, alpine]
+            exclude:
+              - images: alpine
+                os: windows-latest
+            include:
+              - images: amd64/alpine
+                os: ubuntu-22.04
         runs-on: ${{ matrix.os }}
         steps:
         - name: Docker Details
@@ -17,3 +27,8 @@ jobs:
 
         - name: Run Images on ${{ matrix.os }}
           run: docker run ${{ matrix.images }}
+
+# exclude → Removes the combination windows-latest + alpine, so that job will not be created.
+# include → Adds an extra combination ubuntu-22.04 + amd64/alpine in addition to the automatically generated matrix jobs.
+# max-parallel: 2 → Only 2 matrix jobs can run at the same time; the remaining jobs wait in the queue.
+# fail-fast: false → If one matrix job fails, the other matrix jobs continue running and are not canceled.
